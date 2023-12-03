@@ -4,9 +4,20 @@
     {
         static void Main()
         {
-            var day = new D01();
-            day.SolvePart1("D01.txt");
-            day.SolvePart2("D01.txt");
+            for (int i = 1; i <= 25; i++)
+            {
+                var t = Type.GetType($"AdventOfCode2023.D{i:D2}");
+                if (t != null)
+                {
+                    if (Activator.CreateInstance(t) is Day day)
+                    {
+                        Console.WriteLine($"Solutions for day {i}:");
+                        day.SolvePart1();
+                        day.SolvePart2();
+                        Console.WriteLine();
+                    }
+                }
+            }
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿namespace AdventOfCode2023
 {
-    internal interface Day
+    internal abstract class Day
     {
-        void SolvePart1(string filename);
+        internal string FileName => $"{GetType().Name}.txt";
 
-        void SolvePart2(string filename);
+        internal abstract void SolvePart1();
+
+        internal abstract void SolvePart2();
     }
 }

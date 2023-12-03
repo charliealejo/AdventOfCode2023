@@ -2,9 +2,9 @@
 {
     internal class D01 : Day
     {
-        public void SolvePart1(string filename)
+        internal override void SolvePart1()
         {
-            var lines = FileHelper.ReadLines(filename);
+            var lines = FileHelper.ReadLines(FileName);
 
             int r = 0;
             foreach (var line in lines)
@@ -19,9 +19,9 @@
             Console.WriteLine(r);
         }
 
-        public void SolvePart2(string filename)
+        internal override void SolvePart2()
         {
-            var lines = FileHelper.ReadLines(filename);
+            var lines = FileHelper.ReadLines(FileName);
 
             int r = 0;
             foreach (var line in lines)
@@ -49,7 +49,7 @@
             return 0;
         }
 
-        private string[] _digits = new string[]
+        private readonly string[] _digits = new string[]
         {
             "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
             "1", "2", "3", "4", "5", "6", "7", "8", "9"
