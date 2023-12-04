@@ -67,9 +67,9 @@ namespace AdventOfCode2023
 
         private bool IsAdjacentToSymbol(Item n)
         {
-            foreach (var item in _map.Where(i => i.S))
+            foreach (var s in _map.Where(i => i.S))
             {
-                if (item.X >= n.X - 1 && item.X <= n.X + n.L && item.Y >= n.Y - 1 && item.Y <= n.Y + 1)
+                if (ExistsOverlap(n, s))
                 {
                     return true;
                 }
@@ -82,15 +82,20 @@ namespace AdventOfCode2023
         {
             var l = new List<int>();
 
-            foreach (var item in _map.Where(i => !i.S))
+            foreach (var n in _map.Where(i => !i.S))
             {
-                if (s.X >= item.X - 1 && s.X <= item.X + item.L && s.Y >= item.Y - 1 && s.Y <= item.Y + 1)
+                if (ExistsOverlap(n, s))
                 {
-                    l.Add(item.N);
+                    l.Add(n.N);
                 }
             }
 
             return l;
+        }
+
+        private static bool ExistsOverlap(Item n, Item s)
+        {
+            return s.X >= n.X - 1 && s.X <= n.X + n.L && s.Y >= n.Y - 1 && s.Y <= n.Y + 1;
         }
 
         internal class Item
