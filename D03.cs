@@ -30,7 +30,7 @@ namespace AdventOfCode2023
             foreach (var item in _map.Where(i => i.S && i.N == '*'))
             {
                 var ns = GetAdjacentNumbers(item);
-                if (ns.Count == 2)
+                if (ns.Count() == 2)
                 {
                     r += ns.First() * ns.Last();
                 }
@@ -67,30 +67,12 @@ namespace AdventOfCode2023
 
         private bool IsAdjacentToSymbol(Item n)
         {
-            foreach (var s in _map.Where(i => i.S))
-            {
-                if (ExistsOverlap(n, s))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return _map.Any(s => s.S && ExistsOverlap(n, s));
         }
 
-        private ICollection<int> GetAdjacentNumbers(Item s)
+        private IEnumerable<int> GetAdjacentNumbers(Item s)
         {
-            var l = new List<int>();
-
-            foreach (var n in _map.Where(i => !i.S))
-            {
-                if (ExistsOverlap(n, s))
-                {
-                    l.Add(n.N);
-                }
-            }
-
-            return l;
+            return _map.Where(n => !n.S && ExistsOverlap(n, s)).Select(n => n.N);
         }
 
         private static bool ExistsOverlap(Item n, Item s)
