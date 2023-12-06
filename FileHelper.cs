@@ -7,14 +7,14 @@
             return File.ReadAllLines(filename);
         }
 
-        public static IEnumerable<int> ReadLinesAsInt(string filename)
+        public static IEnumerable<long> ReadLinesAsInt(string filename)
         {
-            return ReadLines(filename).Select(x => int.Parse(x));
+            return ReadLines(filename).Select(long.Parse);
         }
 
         public static IEnumerable<double> ReadLinesAsDouble(string filename)
         {
-            return ReadLines(filename).Select((x) => double.Parse(x));
+            return ReadLines(filename).Select(double.Parse);
         }
 
         public static IEnumerable<Tuple<Types>> ReadLinesAsTuple<Types>(string filename)
