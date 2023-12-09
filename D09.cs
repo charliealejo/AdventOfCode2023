@@ -15,15 +15,15 @@
         private void Solve(bool next)
         {
             var lines = FileHelper.ReadLinesAsIntLists(FileName, " ");
-            Console.WriteLine(lines.Sum(line => GetValue(line.ToArray(), next)));
+            var res = lines.Sum(line => GetValue(next ? line.ToArray() : line.Reverse().ToArray()));
+            Console.WriteLine(res);
         }
 
-        private long GetValue(long[] line, bool next)
+        private long GetValue(long[] line)
         {
-            if (line.All(x => x == 0)) return 0;
-
-            var v = GetValue(line[1..].Select((x, i) => x - line[i]).ToArray(), next);
-            return next ? line.Last() + v : line.First() - v;
+            return line.All(x => x == 0)
+                   ? 0
+                   : line.Last() + GetValue(line[1..].Select((x, i) => x - line[i]).ToArray());
         }
     }
 }
