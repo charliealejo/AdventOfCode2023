@@ -4,42 +4,26 @@
     {
         internal override void SolvePart1()
         {
-            var lines = FileHelper.ReadLinesAsIntLists(FileName, " ");
-
-            long r = 0;
-            foreach (var line in lines)
-            {
-                r += CalculateNextValue(line.ToArray());
-            }
-
-            Console.WriteLine(r);
+            Solve(true);
         }
 
         internal override void SolvePart2()
         {
+            Solve(false);
+        }
+
+        private void Solve(bool next)
+        {
             var lines = FileHelper.ReadLinesAsIntLists(FileName, " ");
-
-            long r = 0;
-            foreach (var line in lines)
-            {
-                r += CalculatePreviousValue(line.ToArray());
-            }
-
-            Console.WriteLine(r);
+            Console.WriteLine(lines.Sum(line => GetValue(line.ToArray(), next)));
         }
 
-        private long CalculateNextValue(long[] line)
+        private long GetValue(long[] line, bool next)
         {
-            return line.All(x => x == 0)
-                   ? 0
-                   : line.Last() + CalculateNextValue(line[..^1].Select((x, i) => line[i + 1] - x).ToArray());
-        }
+            if (line.All(x => x == 0)) return 0;
 
-        private long CalculatePreviousValue(long[] line)
-        {
-            return line.All(x => x == 0)
-                   ? 0
-                   : line.First() + CalculatePreviousValue(line[1..].Select((x, i) => line[i] - x).ToArray());
+            var v = GetValue(line[1..].Select((x, i) => x - line[i]).ToArray(), next);
+            return next ? line.Last() + v : line.First() - v;
         }
     }
 }
