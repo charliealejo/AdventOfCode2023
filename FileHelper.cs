@@ -17,6 +17,11 @@
             return ReadLines(filename).Select(double.Parse);
         }
 
+        public static IEnumerable<IEnumerable<long>> ReadLinesAsIntLists(string filename, string separator)
+        {
+            return ReadLines(filename).Select(l => l.Split(separator).Select(long.Parse));
+        }
+
         public static IEnumerable<Tuple<Types>> ReadLinesAsTuple<Types>(string filename)
         {
             var lines = File.ReadAllLines(filename);
