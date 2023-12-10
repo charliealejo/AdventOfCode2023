@@ -14,7 +14,7 @@
         {
             var map = FileHelper.ReadLines(FileName).ToArray();
             var loop = GetLoop(ref map);
-            int res = CalculateAreaInside(map, loop);
+            int res = CalculateAreaInside(map, new HashSet<(int X, int Y)>(loop));
 
             Console.WriteLine(res);
         }
@@ -116,7 +116,7 @@
             return (-1, -1);
         }
 
-        private static int CalculateAreaInside(string[] map, IEnumerable<(int X, int Y)> loop)
+        private static int CalculateAreaInside(string[] map, HashSet<(int X, int Y)> loop)
         {
             var res = 0;
             for (int i = 0; i < map.Length; i++)
@@ -131,7 +131,7 @@
                         if (loop.Contains((e, j)))
                         {
                             if (map[e][j] == '-') u++;
-                            else if ("F7LJS".Contains(map[e][j]))
+                            else if ("F7LJ".Contains(map[e][j]))
                             {
                                 if (lastBend == '.') lastBend = map[e][j];
                                 else
@@ -149,7 +149,7 @@
                         if (loop.Contains((e, j)))
                         {
                             if (map[e][j] == '-') d++;
-                            else if ("F7LJS".Contains(map[e][j]))
+                            else if ("F7LJ".Contains(map[e][j]))
                             {
                                 if (lastBend == '.') lastBend = map[e][j];
                                 else
@@ -167,14 +167,14 @@
                         if (loop.Contains((i, e)))
                         {
                             if (map[i][e] == '|') l++;
-                            else if ("F7LJS".Contains(map[i][e]))
+                            else if ("F7LJ".Contains(map[i][e]))
                             {
                                 if (lastBend == '.') lastBend = map[i][e];
                                 else
                                 {
                                     if (lastBend == '7' && map[i][e] == 'L') l++;
                                     else if (lastBend == 'J' && map[i][e] == 'F') l++;
-                                    if (map[i][e] != '|') lastBend = '.';
+                                    if (map[i][e] != '-') lastBend = '.';
                                 }
                             }
                         }
@@ -185,14 +185,14 @@
                         if (loop.Contains((i, e)))
                         {
                             if (map[i][e] == '|') r++;
-                            else if ("F7LJS".Contains(map[i][e]))
+                            else if ("F7LJ".Contains(map[i][e]))
                             {
                                 if (lastBend == '.') lastBend = map[i][e];
                                 else
                                 {
                                     if (lastBend == 'L' && map[i][e] == '7') r++;
                                     else if (lastBend == 'F' && map[i][e] == 'J') r++;
-                                    if (map[i][e] != '|') lastBend = '.';
+                                    if (map[i][e] != '-') lastBend = '.';
                                 }
                             }
                         }
