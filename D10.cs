@@ -124,7 +124,7 @@
                 for (int j = 0; j < map[i].Length; j++)
                 {
                     if (loop.Contains((i, j))) continue;
-                    int u = 0, d = 0, l = 0, r = 0;
+                    int u = 0;
                     char lastBend = '.';
                     for (int e = i - 1; e >= 0; e--)
                     {
@@ -143,61 +143,7 @@
                             }
                         }
                     }
-                    lastBend = '.';
-                    for (int e = i + 1; e < map.Length; e++)
-                    {
-                        if (loop.Contains((e, j)))
-                        {
-                            if (map[e][j] == '-') d++;
-                            else if ("F7LJ".Contains(map[e][j]))
-                            {
-                                if (lastBend == '.') lastBend = map[e][j];
-                                else
-                                {
-                                    if (lastBend == '7' && map[e][j] == 'L') d++;
-                                    else if (lastBend == 'F' && map[e][j] == 'J') d++;
-                                    if (map[e][j] != '|') lastBend = '.';
-                                }
-                            }
-                        }
-                    }
-                    lastBend = '.';
-                    for (int e = j - 1; e >= 0; e--)
-                    {
-                        if (loop.Contains((i, e)))
-                        {
-                            if (map[i][e] == '|') l++;
-                            else if ("F7LJ".Contains(map[i][e]))
-                            {
-                                if (lastBend == '.') lastBend = map[i][e];
-                                else
-                                {
-                                    if (lastBend == '7' && map[i][e] == 'L') l++;
-                                    else if (lastBend == 'J' && map[i][e] == 'F') l++;
-                                    if (map[i][e] != '-') lastBend = '.';
-                                }
-                            }
-                        }
-                    }
-                    lastBend = '.';
-                    for (int e = j + 1; e < map[i].Length; e++)
-                    {
-                        if (loop.Contains((i, e)))
-                        {
-                            if (map[i][e] == '|') r++;
-                            else if ("F7LJ".Contains(map[i][e]))
-                            {
-                                if (lastBend == '.') lastBend = map[i][e];
-                                else
-                                {
-                                    if (lastBend == 'L' && map[i][e] == '7') r++;
-                                    else if (lastBend == 'F' && map[i][e] == 'J') r++;
-                                    if (map[i][e] != '-') lastBend = '.';
-                                }
-                            }
-                        }
-                    }
-                    if (u % 2 == 1 && d % 2 == 1 && l % 2 == 1 && r % 2 == 1) { res++; }
+                    if (u % 2 == 1) { res++; }
                 }
             }
 
