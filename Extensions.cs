@@ -9,6 +9,13 @@
                     .SelectMany(t => list.Where(e => !t.Contains(e)),
                         (t1, t2) => t1.Concat(new T[] { t2 }));
 
+        internal static IEnumerable<IEnumerable<T>> GetCombinations<T>(this IEnumerable<T> list, int length) =>
+            Enumerable
+                .Range(0, 1 << (list.Count()))
+                .Select(index => list
+                   .Where((v, i) => (index & (1 << i)) != 0))
+                .Where(l => l.Count() == length);
+
         internal static long Product(this IEnumerable<long> list) =>
             list.Aggregate(1L, (current, item) => current * item);
 
