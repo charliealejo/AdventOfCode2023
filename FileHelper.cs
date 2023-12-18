@@ -22,6 +22,11 @@
             return ReadLines(filename).Select(l => l.Split(separator).Select(long.Parse));
         }
 
+        public static int[][] ReadLinesAsIntMap(string filename)
+        {
+            return ReadLines(filename).Select(l => l.ToCharArray().Select(c => int.Parse("" + c)).ToArray()).ToArray();
+        }
+
         public static IEnumerable<Tuple<Types>> ReadLinesAsTuple<Types>(string filename)
         {
             var lines = File.ReadAllLines(filename);
