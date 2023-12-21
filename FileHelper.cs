@@ -2,6 +2,11 @@
 {
     internal class FileHelper
     {
+        public static string ReadAll(string filename)
+        {
+            return File.ReadAllText(filename);
+        }
+
         public static IEnumerable<string> ReadLines(string filename)
         {
             return File.ReadAllLines(filename);
