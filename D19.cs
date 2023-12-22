@@ -19,8 +19,66 @@ namespace AdventOfCode2023
         {
             var file = FileHelper.ReadAll(FileName).Split(Environment.NewLine + Environment.NewLine);
             var flows = GetFlows(file[0].Split(Environment.NewLine));
+            var ranges = "xmas".ToDictionary(c => c, c => (1L, 4000L));
 
-            // Console.WriteLine(GetProbability(flows));
+            Console.WriteLine(CountRanges(ranges, "in", flows));
+        }
+
+        static long CountRanges(Dictionary<char, (long, long)> ranges, string workflowName, Dictionary<string, string[]> workflows)
+        {
+            if (workflowName == "R")
+            {
+                return 0;
+            }
+
+            if (workflowName == "A")
+            {
+                return ranges.Values.Aggregate(1, (long acc, (long, long) range) => acc * (range.Item2 - range.Item1 + 1));
+            }
+
+            var workflow = workflows[workflowName];
+            var total = 0L;
+
+            foreach (var rule in workflow)
+            {
+                var parts = rule.Contains(':') ? rule.Split(":") : new string[] { "-", rule };
+                var condition = parts[0];
+                var next = parts[1];
+
+                if ("xmas".Contains(condition[0]))
+                {
+                    var cat = condition[0];
+                    var op = condition[1];
+                    var rightVal = long.Parse(condition[2..]);
+
+                    var range = ranges[cat];
+
+                    var trueForCondition = op == '<' ? (range.Item1, rightVal - 1) : (rightVal + 1, range.Item2);
+                    var falseForCondition = op == '<' ? (rightVal, range.Item2) : (range.Item1, rightVal);
+
+                    if (trueForCondition.Item1 <= trueForCondition.Item2)
+                    {
+                        var rangesCopy = new Dictionary<char, (long, long)>(ranges);
+                        rangesCopy[cat] = trueForCondition;
+                        total += CountRanges(rangesCopy, next, workflows);
+                    }
+
+                    if (falseForCondition.Item1 <= falseForCondition.Item2)
+                    {
+                        ranges[cat] = falseForCondition;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    total += CountRanges(ranges, next, workflows);
+                }
+            }
+
+            return total;
         }
 
         private static Dictionary<string, string[]> GetFlows(string[] ls)
