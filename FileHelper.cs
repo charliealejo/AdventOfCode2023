@@ -32,6 +32,11 @@
             return ReadLines(filename).Select(l => l.ToCharArray().Select(c => int.Parse("" + c)).ToArray()).ToArray();
         }
 
+        public static char[][] ReadLinesAsCharMap(string filename)
+        {
+            return ReadLines(filename).Select(l => l.ToCharArray().ToArray()).ToArray();
+        }
+
         public static IEnumerable<Tuple<Types>> ReadLinesAsTuple<Types>(string filename)
         {
             var lines = File.ReadAllLines(filename);
