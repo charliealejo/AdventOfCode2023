@@ -32,7 +32,7 @@
 
             int Count(string v) => graph[v].Count(x => !subset.Contains(x));
 
-            while (subset.Select(count => Count(count)).Sum() != 3)
+            while (subset.Select(Count).Sum() != 3)
             {
                 subset.Remove(subset.MaxBy(Count));
             }
