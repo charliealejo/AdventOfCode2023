@@ -2,66 +2,73 @@
 {
     internal class D23 : Day
     {
+        private static (int r, int c)[] _ds = new (int r, int c)[] { (0, 1), (1, 0), (0, -1), (-1, 0) };
+        private static HashSet<(int, int)> _path;
+        private static List<List<(int, int)>> _paths;
+        private static char[][] _map;
+
         internal override void SolvePart1()
         {
-            var map = FileHelper.ReadLinesAsCharMap(FileName);
-            var path = GetLongestPath(map, true);
+            _map = FileHelper.ReadLinesAsCharMap(FileName);
+            var path = GetLongestPath(true);
             Console.WriteLine(path.Length - 1);
         }
 
         internal override void SolvePart2()
         {
-            //var map = FileHelper.ReadLinesAsCharMap(FileName);
-            //var path = GetLongestPath(map, false);
-            //Console.WriteLine(path.Length - 1);
+            // Brute force, takes several minutes
+            _map = FileHelper.ReadLinesAsCharMap(FileName);
+            var path = GetLongestPath(false);
+            Console.WriteLine(path.Length - 1);
         }
 
-        private static (int x, int y)[] GetLongestPath(char[][] map, bool slopes)
+        private static (int x, int y)[] GetLongestPath(bool slopes)
         {
-            var paths = new List<List<(int, int)>>();
-            DFS(map, 0, 1, new List<(int, int)>(), paths, slopes);
-            return paths.OrderBy(l => l.Count).Last().ToArray();
+            _path = new HashSet<(int, int)>();
+            _paths = new List<List<(int, int)>>();
+            DFS(0, 1, slopes);
+            return _paths.OrderBy(l => l.Count).Last().ToArray();
         }
 
-        private static void DFS(char[][] map, int r, int c, List<(int, int)> path, List<List<(int, int)>> paths, bool slopes)
+        private static void DFS(int r, int c, bool slopes)
         {
-            if (map[r][c] == '#') return;
+            if (_map[r][c] == '#') return;
 
-            if (r == map.Length - 1 && c == map[0].Length - 2)
+            var p = (r, c);
+            if (r == _map.Length - 1 && c == _map[0].Length - 2)
             {
-                path.Add((r, c));
-                paths.Add(new List<(int, int)>(path));
-                path.RemoveAt(path.Count - 1);
+                _path.Add(p);
+                _paths.Add(new List<(int, int)>(_path));
+                _path.Remove(p);
                 return;
             }
 
-            var slope = ">v<^".IndexOf(map[r][c]);
+            var slope = ">v<^".IndexOf(_map[r][c]);
 
-            var prev = map[r][c];
-            map[r][c] = '#';
-            path.Add((r, c));
-
-            var ds = new (int r, int c)[] { (0, 1), (1, 0), (0, -1), (-1, 0) };
+            var prev = _map[r][c];
+            _map[r][c] = '#';
+            _path.Add(p);
 
             if (slopes && slope >= 0)
             {
-                DFS(map, r + ds[slope].r, c + ds[slope].c, path, paths, slopes);
+                DFS(r + _ds[slope].r, c + _ds[slope].c, slopes);
             }
             else
             {
-                foreach (var d in ds)
+                foreach (var d in _ds)
                 {
                     int nr = r + d.r;
                     int nc = c + d.c;
-                    if (nr >= 0 && nr < map.Length && nc >= 0 && nc < map[r].Length && map[nr][nc] != '#')
+                    if (nr >= 0 && nr < _map.Length && nc >= 0 && nc < _map[r].Length
+                        && _map[nr][nc] != '#' && !_path.Contains((nr, nc)))
                     {
-                        DFS(map, nr, nc, path, paths, slopes);
+                        DFS(nr, nc, slopes);
                     }
                 }
             }
 
-            map[r][c] = prev;
-            path.RemoveAt(path.Count - 1);
+            _map[r][c] = prev;
+            _path.Remove(p);
         }
     }
 }
